@@ -47,6 +47,7 @@ int npatterns;
 bool is_extended;
 int filter_type;
 int sub_type;
+bool is_once;
 
 char info_source[128];
 int source_mismatch;
@@ -787,7 +788,7 @@ static void usage(void)
 "   -V, --version        output version information\n"
 "   -z, --zeros          show entries with zero activity\n"
 "   -x, --extended=TYPE  show extended stats of TYPE\n");
-
+"   -o, --once  run loop once\n");
 	exit(-1);
 }
 
@@ -805,6 +806,7 @@ static const struct option longopts[] = {
 	{ "version", 0, 0, 'V' },
 	{ "zeros", 0, 0, 'z' },
 	{ "extended", 1, 0, 'x'},
+	{ "once", 1, 0, 'o'},
 	{ 0 }
 };
 
@@ -818,7 +820,7 @@ int main(int argc, char *argv[])
 	int fd;
 
 	is_extended = false;
-	while ((ch = getopt_long(argc, argv, "hjpvVzrnasd:t:ex:",
+	while ((ch = getopt_long(argc, argv, "hjpvVzrnasdo:t:ex:",
 			longopts, NULL)) != EOF) {
 		switch (ch) {
 		case 'z':
@@ -867,6 +869,8 @@ int main(int argc, char *argv[])
 		case 'V':
 			printf("ifstat utility, iproute2-%s\n", version);
 			exit(0);
+		case 'o':
+			is_once = true;
 		case 'h':
 		case '?':
 		default:
@@ -1026,5 +1030,10 @@ int main(int argc, char *argv[])
 		dump_raw_db(hist_fp, 1);
 		fclose(hist_fp);
 	}
+
+	if (is_once) {
+		exit(0);
+	}
+
 	exit(0);
 }
