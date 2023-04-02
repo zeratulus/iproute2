@@ -819,6 +819,7 @@ int main(int argc, char *argv[])
 	int ch;
 	int fd;
 
+	is_once = false;
 	is_extended = false;
 	while ((ch = getopt_long(argc, argv, "hjpvVzrnasdo:t:ex:",
 			longopts, NULL)) != EOF) {
