@@ -709,7 +709,11 @@ static void server_loop(int fd)
 			}
 		}
 		while (children && waitpid(-1, &status, WNOHANG) > 0)
-			children--;
+			children--
+
+		if (is_once) {
+			exit(0);
+		}
 	}
 }
 
@@ -1030,10 +1034,6 @@ int main(int argc, char *argv[])
 		json_output = 0;
 		dump_raw_db(hist_fp, 1);
 		fclose(hist_fp);
-	}
-
-	if (is_once) {
-		exit(0);
 	}
 
 	exit(0);
